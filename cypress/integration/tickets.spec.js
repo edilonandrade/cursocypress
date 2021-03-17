@@ -1,3 +1,5 @@
+const { it } = require("mocha");
+
 describe("Tickets", () => {
     beforeEach(() => cy.visit("https://bit.ly/2XSuwCW"));
 
@@ -24,11 +26,28 @@ describe("Tickets", () => {
         cy.get("#social-media").check();        
     });
 
-    it.only("selects 'friend', and 'publication', then uncheck 'friend'", () => {
+    it("selects 'friend', and 'publication', then uncheck 'friend'", () => {
         cy.get("#friend").check();
         cy.get("#publication").check();
         cy.get("#friend").uncheck();
     });
 
-    it("has 'TICKETBOX' header's heading", () => {});
+    it("has 'TICKETBOX' header's heading", () => {
+        cy.get("header h1").should("contain", "TICKETBOX");
+    });
+
+    it.only("alerts on invalid email", () => {
+        cy.get("#email")
+            .as("email")
+            .type("emailinvalido-gmail.com");
+
+        cy.get("#email.invalid").should("exist");
+
+        cy.get("@email")
+            .clear()
+            .type("emailvalido@gmail.com");
+        
+        cy.get("#email.invalid").should("not.exist");
+    });
+    
 });
