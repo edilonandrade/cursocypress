@@ -50,7 +50,7 @@ describe("Tickets", () => {
         cy.get("#email.invalid").should("not.exist");
     });
     
-    it.only("fills and reset the form", () => {
+    it("fills and reset the form", () => {
         const firstName = "Edilon";
         const lastName = "Andade";
         const fullName = `${firstName} ${lastName}`;
@@ -78,6 +78,24 @@ describe("Tickets", () => {
         cy.get("button[type='reset']").click();
 
         cy.get("@submitButton").should("be.disabled");        
+    });
+
+    it.only("fills mandatory fileds using support command", () => {
+        const customer = {
+            firstName: "João",
+            lastName: "Silva",
+            email: "joaosilva@example.com"
+        };
+
+        cy.fillMandatoryFields(customer);
+
+        cy.get("button[type='submit']")
+            .as("submitButton")
+            .should("not.be.disabled");
+
+        cy.get("#agree").uncheck();
+
+        cy.get("@submitButton").should("be.disabled");     
     });
 
 });
